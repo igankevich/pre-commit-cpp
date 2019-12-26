@@ -1,0 +1,6 @@
+- id: header-guard
+  name: Header guard
+  description: Add C/C++ header guard
+  entry: hooks/header-guard.py
+  language: python
+  files: \.(h|hh|H|hp|hxx|hpp|HPP|h\+\+|tcc)$
