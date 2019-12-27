@@ -14,11 +14,14 @@ def normalise_line_head(line, n):
             if c == '\t': result += ' '*n # replace tabs with 4 spaces
             else: result += ' '           # replace other white-space characters with 1 space
         else: result += c
+    print('Expand tabs')
     return result
 
 def normalise_line_tail(line):
     """Replace white-space characters at the end of the line with a newline character"""
-    return line.rstrip()
+    l = line.rstrip() + '\n'
+    if l != line: print('Remove trailing white-space')
+    return l
 
 def remove_empty_lines(lines):
     start = 0
@@ -49,10 +52,12 @@ def normalise_encoding(filename):
     if c != content:
         content = c
         ret = 1
+        print('Remove BOM')
     encoding = chardet.detect(content)['encoding']
     if encoding != 'ascii' and encoding != 'utf-8':
         content = bytes(str(content, encoding), 'utf-8')
         ret = 1
+        print('Convert from {} to utf-8'.format(encoding))
     if ret != 0:
         with open(filename, 'wb') as f: f.write(content);
     return ret
@@ -86,7 +91,6 @@ def main(argv=None):
             with open(filename, 'w') as f:
                 for line in lines:
                     f.write(line)
-                    f.write('\n')
     return ret
 
 if __name__ == '__main__':
