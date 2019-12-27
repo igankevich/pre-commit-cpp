@@ -14,14 +14,11 @@ def normalise_line_head(line, n):
             if c == '\t': result += ' '*n # replace tabs with 4 spaces
             else: result += ' '           # replace other white-space characters with 1 space
         else: result += c
-    print('Expand tabs')
     return result
 
 def normalise_line_tail(line):
     """Replace white-space characters at the end of the line with a newline character"""
-    l = line.rstrip() + '\n'
-    if l != line: print('Remove trailing white-space')
-    return l
+    return line.rstrip() + '\n'
 
 def remove_empty_lines(lines):
     start = 0
