@@ -1,3 +1,9 @@
+- id: normalise
+  name: Normalise white space
+  description: Expand tabs, remove unnecessary whitespace.
+  entry: normalise
+  language: python
+  files: \.(h|hh|H|hp|hxx|hpp|HPP|h\+\+|tcc|cc|cp|cxx|cpp|CPP|c\+\+|C)$
 - id: header-guard
   name: Header guard
   description: Add C/C++ header guard
