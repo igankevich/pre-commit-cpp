@@ -10,3 +10,9 @@
   entry: header-guard
   language: python
   files: \.(h|hh|H|hp|hxx|hpp|HPP|h\+\+|tcc)$
+- id: normalise-opencl
+  name: Normalise OpenCL keywords
+  description: Remove leading underscores from OpenCL keywords
+  entry: normalise-opencl
+  language: python
+  files: \.cl$
