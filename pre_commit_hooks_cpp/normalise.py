@@ -49,12 +49,12 @@ def normalise_encoding(filename):
     if c != content:
         content = c
         ret = 1
-        print('Remove BOM')
+        print('{}: remove BOM'.format(filename))
     encoding = chardet.detect(content)['encoding']
     if encoding != 'ascii' and encoding != 'utf-8':
         content = bytes(str(content, encoding), 'utf-8')
         ret = 1
-        print('Convert from {} to utf-8'.format(encoding))
+        print('{}: convert from {} to utf-8'.format(filename, encoding))
     if ret != 0:
         with open(filename, 'wb') as f: f.write(content);
     return ret
@@ -74,7 +74,7 @@ def normalise_white_space(filename, args):
         lines = l
         ret = 1
     if ret != 0:
-        print('remove white space')
+        print('{}: remove white space'.format(filename))
         with open(filename, 'w') as f:
             for line in lines:
                 f.write(line)

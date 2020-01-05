@@ -43,7 +43,7 @@ def main(argv=None):
                     f.write(contents[m.end(1):m.start(2)])
                     f.write(name)
                     f.write(contents[m.end(2):])
-                print('Rename header guard: {}'.format(filename))
+                print('{}: rename header guard'.format(filename))
                 ret = 1
         else:
             # add header guard
@@ -56,7 +56,7 @@ def main(argv=None):
                     f.write(' // vim' + ':filetype=')
                     f.write(filetype)
                 f.write('\n')
-            print('Add header guard: {}'.format(filename))
+            print('{}: add header guard'.format(filename))
             ret = 1
     return ret
 

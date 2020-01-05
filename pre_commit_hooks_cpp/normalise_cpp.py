@@ -4,7 +4,7 @@ import os
 
 INCLUDE_RELATIVE = re.compile(r'\s*#include\s+"([^"]+)"\s*\n')
 
-def normalise_include_path(source_filename, line, src):
+def normalise_include_path(source_filename, line, src, line_no):
     from os.path import isfile, join
     dir = os.path.dirname(source_filename)
     m = INCLUDE_RELATIVE.match(line)
@@ -23,6 +23,7 @@ def normalise_include_path(source_filename, line, src):
                 filename = filename_win
             if isfile(join(src,filename)):
                 line = '#include <{}>\n'.format(filename)
+                print('{}:{}:1 fix include path'.format(source_filename, line_no))
     return line
 
 def normalise_include_statements(filename, args):
@@ -32,12 +33,11 @@ def normalise_include_statements(filename, args):
     with open(filename) as f:
         lines = f.readlines();
     for i,line in enumerate(lines):
-        l = normalise_include_path(filename, line, args.src)
+        l = normalise_include_path(filename, line, args.src, i)
         if l != line:
             lines[i] = l
             ret = 1
     if ret != 0:
-        print('fix include paths')
         with open(filename, 'w') as f:
             for line in lines:
                 f.write(line)

@@ -17,6 +17,7 @@ def main(argv=None):
             content = new_content
             ret = 1
         if ret != 0:
+            print('{}: normalise OpenCL keywords'.format(filename))
             with open(filename, 'w') as f:
                 f.write(content)
     return ret
