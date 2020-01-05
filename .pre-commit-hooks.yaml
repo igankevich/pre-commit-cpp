@@ -16,3 +16,9 @@
   entry: normalise-opencl
   language: python
   files: \.cl$
+- id: normalise-cpp
+  name: Normalise C/C++ code
+  description: Expand include paths.
+  entry: normalise-cpp
+  language: python
+  files: \.(h|hh|H|hp|hxx|hpp|HPP|h\+\+|tcc|cc|cp|cxx|cpp|CPP|c\+\+|C)$

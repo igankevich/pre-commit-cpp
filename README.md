@@ -6,12 +6,14 @@ Add the following code to your `.pre-commit-config.yaml`
 
 ```yaml
 -   repo: https://github.com/igankevich/pre-commit-cpp
-    rev: 0.3.0
+    rev: 0.4.0
     hooks:
     -   id: normalise
         args: ['--tab-width=4']
     -   id: header-guard
     -   id: normalise-opencl
+    -   id: normalise-cpp
+        args: ['--src=src']
 ```
 
 
@@ -23,6 +25,8 @@ Add the following code to your `.pre-commit-config.yaml`
   - replace white space at the end of the line with a newline character
   - remove empty lines from the beginning and the end of the file
 - `header-guard` — add/update header guard in C/C++ headers.
+- `normalise-cpp` — fix include paths in C/C++ files:
+  - replace relative include paths with the paths relative to source directory
 - `normalise-opencl` — remove leading underscores from OpenCL keywords (e.g.
   `kernel` instead of `__kernel`. Currently this is pure regular expression
   substitution.

@@ -24,10 +24,10 @@ def remove_empty_lines(lines):
     start = 0
     for i,line in enumerate(lines):
         start = i
-        if line != '': break
+        if line != '\n': break
     for i,line in enumerate(reversed(lines)):
         end = i
-        if line != '': break
+        if line != '\n': break
     end = len(lines) - end
     return lines[start:end]
 
@@ -59,6 +59,27 @@ def normalise_encoding(filename):
         with open(filename, 'wb') as f: f.write(content);
     return ret
 
+def normalise_white_space(filename, args):
+    ret = 0
+    lines = None
+    with open(filename) as f:
+        lines = f.readlines();
+    for i,line in enumerate(lines):
+        l = normalise_line(line, args.tab_width)
+        if l != line:
+            lines[i] = l
+            ret = 1
+    l = normalise_lines(lines)
+    if len(l) != len(lines):
+        lines = l
+        ret = 1
+    if ret != 0:
+        print('remove white space')
+        with open(filename, 'w') as f:
+            for line in lines:
+                f.write(line)
+    return ret
+
 def int_positive(text):
     i = int(text)
     if i <= 0: raise argparse.ArgumentTypeError("%s must be positive" % text)
@@ -71,25 +92,9 @@ def main(argv=None):
     args = parser.parse_args(argv)
     ret = 0
     for filename in args.filenames:
-        ret = normalise_encoding(filename)
-        lines = None
-        with open(filename) as f:
-            lines = f.readlines();
-        for i,line in enumerate(lines):
-            l = normalise_line(line, args.tab_width)
-            if l != line:
-                lines[i] = l
-                ret = 1
-        l = normalise_lines(lines)
-        if len(l) != len(lines):
-            lines = l
-            ret = 1
-        if ret != 0:
-            with open(filename, 'w') as f:
-                for line in lines:
-                    f.write(line)
+        ret |= normalise_encoding(filename)
+        ret |= normalise_white_space(filename, args)
     return ret
 
 if __name__ == '__main__':
     exit(main())
-
