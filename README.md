@@ -6,14 +6,14 @@ Add the following code to your `.pre-commit-config.yaml`
 
 ```yaml
 -   repo: https://github.com/igankevich/pre-commit-cpp
-    rev: 0.4.0
+    rev: 0.5.0
     hooks:
     -   id: normalise
         args: ['--tab-width=4']
     -   id: header-guard
     -   id: normalise-opencl
     -   id: normalise-cpp
-        args: ['--src=src']
+        args: ['--src=src', '--top=sys/types.h']
 ```
 
 
@@ -27,6 +27,7 @@ Add the following code to your `.pre-commit-config.yaml`
 - `header-guard` — add/update header guard in C/C++ headers.
 - `normalise-cpp` — fix include paths in C/C++ files:
   - replace relative include paths with the paths relative to source directory
+  - sort headers excluding the ones that should always be on the top (e.g. `sys/types.h`)
 - `normalise-opencl` — remove leading underscores from OpenCL keywords (e.g.
   `kernel` instead of `__kernel`. Currently this is pure regular expression
   substitution.
