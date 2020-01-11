@@ -6,6 +6,10 @@ from enum import IntEnum
 INCLUDE_RELATIVE = re.compile(r'\s*#include\s+"([^"]+)"\s*\n')
 INCLUDE_SYSTEM = re.compile(r'\s*#include\s+<([^>]+)>\s*\n')
 STRAY_BRACE = re.compile(r'^\s*[\)\}\]>]+\s*;*\s*\n')
+LABEL = re.compile(r'^\s*[a-zA-Z_]+[a-zA-Z_0-9]\s*:\s*$')
+CASE = re.compile(r'^\s*case\b')
+EQEND = re.compile(r'.*[^!<>=]=$')
+ELSE = re.compile(r'\}\s*\b(else|catch)\b\s*.*\{')
 
 def relativise_include_path(source_filename, line, src, line_no):
     from os.path import isfile, join
@@ -83,6 +87,21 @@ class Token(IntEnum):
     Angle = 3,   # <>
 
 def normalise_indent(filename, args):
+    def no_comments(line):
+        new_line = ''
+        multiline = False
+        c0 = ' '
+        for c in line:
+            if c0 == '/' and c == '/':
+                new_line = new_line[:-1]
+                break
+            if c0 == '/' and c == '*':
+                new_line = new_line[:-1]
+                multiline = True
+            if c0 == '*' and c == '/': multiline = False
+            if not multiline: new_line += c
+            c0 = c
+        return new_line
     ret = 0
     lines = None
     with open(filename) as f:
@@ -93,10 +112,26 @@ def normalise_indent(filename, args):
     multiline_comment = False
     inside_string = False
     inside_char = False
+    inside_macro = False
+    inside_statement = False
     for i,line in enumerate(lines):
+        inside_label = False
         new_level = level
         min_level = 100
-        if not line.lstrip().startswith('//'):
+        xline = line.strip()
+        yline = no_comments(xline)
+        if xline.startswith('#'):
+            inside_macro = True
+        if not inside_macro:
+            if yline.endswith(';'):
+                inside_statement = False
+            if EQEND.match(yline):
+                inside_statement = True
+        if inside_macro and not xline.endswith('\\'):
+            inside_macro = False
+        if LABEL.match(yline) or CASE.match(yline):
+            inside_label = True
+        if not xline.startswith('//'):
             c0 = ' '
             c1 = ' '
             multiline_comment_line = multiline_comment
@@ -124,15 +159,20 @@ def normalise_indent(filename, args):
                 c1 = c0
                 c0 = c
                 new_level = sum(tokens)
+                if inside_macro: new_level += 1
+                if inside_statement: new_level += 1
                 min_level = min(new_level,min_level)
-        if min_level < level and new_level >= level: level = min_level
+        #if min_level < level and new_level >= level: level = min_level
+        if ELSE.match(yline): level = min_level
         if new_level < level and STRAY_BRACE.match(line): level = new_level
+        if inside_label: level = max(level-1,0)
         #if new_level < level: level = new_level
         if multiline_comment_line:
             new_lines.append(line)
         else:
             if line != '\n': line = line.lstrip()
-            new_lines.append((' '*level*args.tab_width) + line)
+            line = (' '*level*args.tab_width) + line
+            new_lines.append(line.rstrip() + '\n')
         level = new_level
     if new_lines != lines:
         lines = new_lines
