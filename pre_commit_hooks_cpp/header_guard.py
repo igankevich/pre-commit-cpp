@@ -31,8 +31,9 @@ def main(argv=None):
         with open(filename) as f:
             contents = f.read();
         name = guard_name(filename)
-        m = guard.match(contents)
+        m = list(guard.finditer(contents))
         if m:
+            m = m[0]
             name1 = m.group(1)
             name2 = m.group(2)
             if name1 == name2 and name1 != name:
