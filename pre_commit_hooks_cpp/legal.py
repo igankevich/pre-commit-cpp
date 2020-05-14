@@ -52,14 +52,13 @@ class State(IntEnum):
 def copyright_notice(filename, aliases, args):
     result = subprocess.run(
         ['git', '--no-pager', 'log', '--pretty=format:%an|%ad', '--date=format:%Y',
-            '--follow', '--', filename],
+            '--follow', '--', 'setup.cfg'],
         stdout=subprocess.PIPE)
     result = result.stdout.decode('utf-8')
     if not result: return args.copyright_string
     authors = {}
     for line in result.split('\n'):
         pair = line.split('|')
-        print(pair)
         author = aliases.get(pair[0], pair[0])
         date = pair[1]
         dates = authors.get(author, [])
@@ -135,7 +134,7 @@ def main(argv=None):
     parser.add_argument('--preamble', help='Comment preamble', default='')
     parser.add_argument('--license-notice', help='License notice text', default='gpl3+')
     parser.add_argument('--postamble', help='Comment postamble', default='')
-    parser.add_argument('--alias', nargs='+', help='Define author alias', default=[])
+    parser.add_argument('--alias', action='append', help='Define author alias', default=[])
     args = parser.parse_args(argv)
     if args.license_notice == 'gpl3+': args.license_notice = GPL3_LICENSE_NOTICE
     elif args.license_notice == 'unlicense': args.license_notice = UNLICENSE_NOTICE
