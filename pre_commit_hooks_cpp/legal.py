@@ -52,7 +52,7 @@ class State(IntEnum):
 def copyright_notice(filename, aliases, args):
     result = subprocess.run(
         ['git', '--no-pager', 'log', '--pretty=format:%an|%ad', '--date=format:%Y',
-            '--follow', '--', 'setup.cfg'],
+            '--follow', '--', filename],
         stdout=subprocess.PIPE)
     result = result.stdout.decode('utf-8')
     if not result: return args.copyright_string
