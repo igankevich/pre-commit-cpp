@@ -21,4 +21,10 @@
   description: Expand include paths.
   entry: normalise-cpp
   language: python
+- id: legal
+  name: Copyright and license notices
+  description: Add/update copyright and license notices.
+  entry: legal
+  language: python
+  files: \.(h|hh|H|hp|hxx|hpp|HPP|h\+\+|tcc|cc|cp|cxx|cpp|CPP|c\+\+|C)$
   files: \.(h|hh|H|hp|hxx|hpp|HPP|h\+\+|tcc|cc|cp|cxx|cpp|CPP|c\+\+|C)$
