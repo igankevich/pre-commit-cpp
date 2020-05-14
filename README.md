@@ -6,7 +6,7 @@ Add the following code to your `.pre-commit-config.yaml`
 
 ```yaml
 -   repo: https://github.com/igankevich/pre-commit-cpp
-    rev: 0.5.1
+    rev: 0.6.0
     hooks:
     -   id: normalise
         args: ['--tab-width=4']
@@ -14,6 +14,11 @@ Add the following code to your `.pre-commit-config.yaml`
     -   id: normalise-opencl
     -   id: normalise-cpp
         args: ['--src=src', '--top=sys/types.h']
+    -   id: legal
+        args: ['--copyright-string=©', '--programme-name=Foobar',
+               '--license-notice=gpl3+', # or any text
+               '--alias=gituser:Git User',
+               '--preamble=', '--postamble=']
 ```
 
 
@@ -31,6 +36,9 @@ Add the following code to your `.pre-commit-config.yaml`
 - `normalise-opencl` — remove leading underscores from OpenCL keywords (e.g.
   `kernel` instead of `__kernel`. Currently this is pure regular expression
   substitution.
+- `legal` — add copyright and license notices at the beginning of the file. License notice
+  argument can be any text and in this text `{0}` expands to programme name. Author names
+  are read from git log and can be aliased.
 
 
 ### License
