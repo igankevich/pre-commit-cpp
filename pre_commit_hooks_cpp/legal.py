@@ -1,6 +1,7 @@
 import argparse
 import subprocess
 from enum import IntEnum
+from datetime import datetime
 
 GPL3_LICENSE_NOTICE = """This file is part of {0}.
 
@@ -50,14 +51,20 @@ class State(IntEnum):
     Found = 2,
 
 def copyright_notice(filename, aliases, args):
+    lines = []
     result = subprocess.run(
         ['git', '--no-pager', 'log', '--pretty=format:%an|%ad', '--date=format:%Y',
             '--follow', '--', filename],
         stdout=subprocess.PIPE)
     result = result.stdout.decode('utf-8')
-    if not result: return args.copyright_string
+    if result:
+        lines = result.split('\n')
+    if not lines:
+        username = subprocess.run(['git', 'config', 'user.name'], stdout=subprocess.PIPE)
+        username = username.stdout.decode('utf-8').strip()
+        lines = ['|'.join([username, datetime.now().strftime("%Y")])]
     authors = {}
-    for line in result.split('\n'):
+    for line in lines:
         pair = line.split('|')
         author = aliases.get(pair[0], pair[0])
         date = pair[1]

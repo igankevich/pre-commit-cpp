@@ -6,7 +6,7 @@ Add the following code to your `.pre-commit-config.yaml`
 
 ```yaml
 -   repo: https://github.com/igankevich/pre-commit-cpp
-    rev: 0.6.3
+    rev: 0.6.4
     hooks:
     -   id: normalise
         args: ['--tab-width=4']
