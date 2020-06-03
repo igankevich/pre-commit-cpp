@@ -51,7 +51,7 @@ def normalise_encoding(filename):
         ret = 1
         print('{}: remove BOM'.format(filename))
     encoding = chardet.detect(content)['encoding']
-    if encoding != 'ascii' and encoding != 'utf-8':
+    if encoding != 'ascii' and encoding != 'utf-8' and encoding is not None:
         content = bytes(str(content, encoding), 'utf-8')
         ret = 1
         print('{}: convert from {} to utf-8'.format(filename, encoding))
