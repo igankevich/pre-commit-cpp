@@ -10,6 +10,7 @@ Add the following code to your `.pre-commit-config.yaml`
     hooks:
     -   id: normalise
         args: ['--tab-width=4']
+        additional_dependencies: ['chardet']
     -   id: header-guard
     -   id: normalise-opencl
     -   id: normalise-cpp
