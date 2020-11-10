@@ -22,6 +22,7 @@ def normalise_line_tail(line):
 
 def remove_empty_lines(lines):
     start = 0
+    end = 0
     for i,line in enumerate(lines):
         start = i
         if line != '\n': break
