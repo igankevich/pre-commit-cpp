@@ -11,6 +11,7 @@ def guard_name(filename):
     name = re.sub(r'^src/', '', name)
     name = re.sub(r'^\\.\\./', '', name)
     name = re.sub(r'^\\./', '', name)
+    name = re.sub(r'\\.in$', '', name)
     name = re.sub(r'[^0-9a-zA-Z_]', '_', name)
     return name.upper()
 
